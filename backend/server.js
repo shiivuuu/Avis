@@ -12,6 +12,142 @@ app.use(cors());
 app.use(express.json({ limit: '25mb' }));
 
 /**
+ * GET /
+ * Root visual dashboard for browser inspection
+ */
+app.get('/', (req, res) => {
+  const hasGemini = Boolean(process.env.GEMINI_API_KEY);
+  const hasOpenAI = Boolean(process.env.OPENAI_API_KEY);
+  const provider = hasGemini ? 'Google Gemini 1.5 Flash' : hasOpenAI ? 'OpenAI GPT-4o-mini' : 'None (Offline Local Mode)';
+
+  res.setHeader('Content-Type', 'text/html');
+  res.send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avis Backend Status</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #FDFBF7;
+      color: #111613;
+      padding: 2rem;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .card {
+      background: #F4EFE6;
+      border: 2px solid #DDD5C7;
+      border-radius: 1.25rem;
+      padding: 2rem;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #D8F3DC;
+      color: #1B4332;
+      font-weight: 700;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #157347;
+      border-radius: 50%;
+    }
+    h1 {
+      color: #1B4332;
+      font-size: 1.75rem;
+      margin: 1rem 0 0.5rem 0;
+      font-weight: 900;
+    }
+    p {
+      color: #37433B;
+      line-height: 1.5;
+      margin: 0.25rem 0;
+    }
+    .endpoints {
+      background: #FFFFFF;
+      border: 1px solid #DDD5C7;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+    .endpoint-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    .endpoint-row:last-child {
+      margin-bottom: 0;
+    }
+    .method {
+      font-weight: bold;
+      color: #1B4332;
+    }
+    a {
+      color: #2D6A4F;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+    .btn {
+      display: block;
+      text-align: center;
+      background: #1B4332;
+      color: white;
+      text-decoration: none;
+      padding: 0.85rem;
+      border-radius: 0.75rem;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">
+      <span class="dot"></span>
+      SERVICE ONLINE
+    </div>
+    <h1>Avis AI Vision Backend</h1>
+    <p>The multimodal assistant API service is running and ready to accept requests.</p>
+
+    <div class="endpoints">
+      <div class="endpoint-row">
+        <span class="method">GET /api/health</span>
+        <a href="/api/health" target="_blank">Test Health Check</a>
+      </div>
+      <div class="endpoint-row">
+        <span class="method">POST /api/ask</span>
+        <span>Multimodal Q&amp;A</span>
+      </div>
+    </div>
+
+    <p><strong>Configured AI Provider:</strong> ${provider}</p>
+    <p><strong>Port:</strong> ${PORT}</p>
+
+    <a href="http://${req.hostname}:3000" class="btn">Open Avis Web Application &rarr;</a>
+  </div>
+</body>
+</html>
+  `);
+});
+
+/**
  * GET /api/health
  * Health check endpoint for client availability polling.
  */
