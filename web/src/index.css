@@ -2,25 +2,97 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  color-scheme: light;
+@layer base {
+  :root {
+    --bg-primary: #F7F5EE;
+    --text-primary: #202821;
+    --color-forest: #204C3A;
+    --font-scale: 1;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #F7F5EE;
+    color: #202821;
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #F7F5EE;
+    color: #202821;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #FDFBF7;
+/* Accessible text scaling modes */
+.text-size-standard {
+  font-size: 100%;
+}
+.text-size-large {
+  font-size: 115%;
+}
+.text-size-xl {
+  font-size: 130%;
 }
 
-/* Accessible focus outlines */
+/* High Contrast Mode */
+.high-contrast {
+  --bg-primary: #FFFFFF;
+  --text-primary: #000000;
+  --color-forest: #0B291D;
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+.high-contrast button {
+  border-width: 2px !important;
+}
+
+/* Focus indicators conforming to WCAG 2.2 AA (minimum 3px thickness) */
 *:focus-visible {
-  outline: 3px solid #1B4332 !important;
-  outline-offset: 2px !important;
+  outline: 3px solid #204C3A !important;
+  outline-offset: 3px !important;
 }
 
-/* Touch targets */
-button, [role="button"] {
-  min-height: 56px;
+/* Touch Targets: minimum 48px for comfortable accessibility */
+button, a, input, select, textarea, [role="button"], [role="tab"] {
+  min-height: 48px;
   touch-action: manipulation;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.reduced-motion *, .reduced-motion ::before, .reduced-motion ::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Custom scrollbar matching Warm Ivory palette */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #EFECE2;
+}
+::-webkit-scrollbar-thumb {
+  background: #A8B9A0;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #204C3A;
 }

@@ -1,42 +1,96 @@
-import React, { useState } from 'react';
-import StatusHeader from './components/StatusHeader';
-import NavigationView from './views/NavigationView';
-import DocumentView from './views/DocumentView';
+import React, { useEffect } from 'react';
+import { AppProvider, useApp } from './context/AppContext';
+import AppShell from './components/AppShell';
+import HomeView from './views/HomeView';
+import VisionView from './views/VisionView';
+import ReaderView from './views/ReaderView';
 import AssistantView from './views/AssistantView';
-import { tts } from './utils/tts';
+import ActivityView from './views/ActivityView';
+import SettingsView from './views/SettingsView';
+import HelpView from './views/HelpView';
 
-export default function App() {
-  const [currentMode, setCurrentMode] = useState('navigation');
-  const [cameraActive, setCameraActive] = useState(false);
-  const [micActive, setMicActive] = useState(false);
-  const [backendConnected, setBackendConnected] = useState(false);
+function AppContent() {
+  const { currentRoute, navigateTo, stopSpeech } = useApp();
 
-  const handleModeChange = (mode) => {
-    tts.stop();
-    setCurrentMode(mode);
-    const modeName = mode === 'navigation' ? 'Navigation' : mode === 'document' ? 'Document Reader' : 'AI Assistant';
-    tts.speak(`Switched to ${modeName} mode.`, { flush: true });
+  // Global Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Ignore if user is currently typing inside an input or textarea
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
+        return;
+      }
 
-    if ('vibrate' in navigator) {
-      navigator.vibrate(40);
+      const key = e.key.toUpperCase();
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        stopSpeech();
+        return;
+      }
+
+      switch (key) {
+        case 'H':
+          navigateTo('home');
+          break;
+        case 'V':
+          navigateTo('vision');
+          break;
+        case 'R':
+          navigateTo('reader');
+          break;
+        case 'A':
+          navigateTo('assistant');
+          break;
+        case 'C':
+          navigateTo('activity');
+          break;
+        case 'S':
+          navigateTo('settings');
+          break;
+        case '?':
+          navigateTo('help');
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigateTo, stopSpeech]);
+
+  const renderActiveView = () => {
+    switch (currentRoute) {
+      case 'home':
+        return <HomeView />;
+      case 'vision':
+        return <VisionView />;
+      case 'reader':
+        return <ReaderView />;
+      case 'assistant':
+        return <AssistantView />;
+      case 'activity':
+        return <ActivityView />;
+      case 'settings':
+        return <SettingsView />;
+      case 'help':
+        return <HelpView />;
+      default:
+        return <HomeView />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] text-[#111613] flex flex-col font-sans">
-      <StatusHeader
-        currentMode={currentMode}
-        onModeChange={handleModeChange}
-        cameraActive={cameraActive}
-        micActive={micActive}
-        backendConnected={backendConnected}
-      />
+    <AppShell>
+      {renderActiveView()}
+    </AppShell>
+  );
+}
 
-      <main className="flex-1 pb-8">
-        {currentMode === 'navigation' && <NavigationView onCameraStateChange={setCameraActive} />}
-        {currentMode === 'document' && <DocumentView onCameraStateChange={setCameraActive} />}
-        {currentMode === 'assistant' && <AssistantView onCameraStateChange={setCameraActive} />}
-      </main>
-    </div>
+export default function App() {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
   );
 }

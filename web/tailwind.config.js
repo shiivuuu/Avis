@@ -4,32 +4,51 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
         ivory: {
-          DEFAULT: '#FDFBF7',
-          surface: '#F4EFE6',
-          container: '#EFE9DC',
-          border: '#DDD5C7'
+          DEFAULT: '#F7F5EE',
+          light: '#FBF9F4',
+          surface: '#EFECE2',
+          border: '#DDD8CB'
         },
         forest: {
-          dark: '#1B4332',
-          DEFAULT: '#1B4332',
-          secondary: '#2D6A4F',
-          light: '#40916C',
-          mint: '#D8F3DC'
-        },
-        hazard: {
-          DEFAULT: '#931A08',
-          container: '#FBE8E5',
-          text: '#6B1104'
+          DEFAULT: '#204C3A',
+          dark: '#163A2C',
+          light: '#2E6950',
+          accent: '#3B8264',
+          sage: '#A8B9A0',
+          paleSage: '#E9EFE5'
         },
         contrast: {
-          high: '#111613',
-          medium: '#2E3A33',
-          muted: '#536257'
+          primary: '#202821',
+          secondary: '#535E56',
+          muted: '#717D74',
+          high: '#0D130E'
+        },
+        status: {
+          error: '#A62C2C',
+          errorBg: '#FDF1F1',
+          warning: '#855A0B',
+          warningBg: '#FFF9E6',
+          success: '#1B5E20',
+          successBg: '#E8F5E9'
         }
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+      },
+      fontSize: {
+        'fluid-h1': 'clamp(1.75rem, 4vw, 2.75rem)',
+        'fluid-h2': 'clamp(1.35rem, 3vw, 2rem)',
+        'fluid-body': 'clamp(1rem, 1.5vw, 1.15rem)',
+      },
+      boxShadow: {
+        'subtle': '0 2px 8px -2px rgba(32, 76, 58, 0.06), 0 1px 4px -1px rgba(32, 76, 58, 0.04)',
+        'card': '0 4px 16px -4px rgba(32, 76, 58, 0.08), 0 2px 6px -2px rgba(32, 76, 58, 0.04)',
+        'elevated': '0 12px 32px -8px rgba(32, 76, 58, 0.12), 0 4px 12px -2px rgba(32, 76, 58, 0.06)'
       }
     },
   },
