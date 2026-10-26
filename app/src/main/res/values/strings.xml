@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Avis</string>
+    <string name="app_tagline">Assistive Vision &amp; Spatial Awareness</string>
+    <string name="camera_permission_required">Camera permission is required to analyze your surroundings and read text.</string>
+    <string name="grant_camera_permission">Grant Camera Permission</string>
+    <string name="audio_permission_required">Microphone permission is required for voice commands.</string>
+</resources>
